@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/demofunction"
+        android:orientation="vertical">
+        <TextView android:id="@+id/basicchannel_send"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="basicchanel方式nativeToDart"/>
+
+        <TextView android:id="@+id/methodchannel_send"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="methodChannel方式nativeReceiverByDart"/>
+
+        <TextView android:id="@+id/eventchannel_send"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="eventChannel方式nativeReceiverByDart"/>
+
+        <TextView android:id="@+id/tv_resActivity"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="跳转到resActivity"/>
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flutterview"
+        android:layout_below="@+id/demofunction">
+    </FrameLayout>
+</RelativeLayout>
