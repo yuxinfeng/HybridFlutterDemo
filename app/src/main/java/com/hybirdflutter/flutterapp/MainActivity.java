@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.Duration;
+import com.hybirdflutter.commincation.BasicChannelManager;
+import com.hybirdflutter.commincation.EventChannelManager;
+import com.hybirdflutter.commincation.MethodChannelManager;
 
 import io.flutter.facade.Flutter;
 import io.flutter.plugin.common.BasicMessageChannel;
@@ -20,18 +21,16 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.common.StandardMethodCodec;
-import io.flutter.plugin.common.StringCodec;
 import io.flutter.view.FlutterView;
+
+import static com.hybirdflutter.commincation.ChannelConst.ANDROID_AND_FLUTTER_CHANNEL;
+import static com.hybirdflutter.commincation.ChannelConst.ANDROID_EVENT_CHANNEL;
+import static com.hybirdflutter.commincation.ChannelConst.ANDROID_METHOD_CHANNEL;
+import static com.hybirdflutter.commincation.ChannelConst.INIT_ROUTE;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final String ANDROID_AND_FLUTTER_CHANNEL = "com.ycbjie.androidAndFlutter/plugin";
-    public static final String ANDROID_METHOD_CHANNEL = "com.ycbjie.method/plugin";
-    public static final String ANDROID_EVENT_CHANNEL = "com.ycbjie.event/plugin";
-
-
-    private static final String INIT_ROUTE = "yc_route";
     private BasicMessageChannel<Object> basicMessageChannel;
     private MethodChannel methodChannel;
     private EventChannel eventChannel;
@@ -43,20 +42,24 @@ public class MainActivity extends AppCompatActivity {
     TextView eventSend;
     TextView resActivity;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
         initflutterView();
-        initChannel(view);
+        createChannel(view);
+        initChannel();
     }
 
-    private void initChannel(FlutterView view) {
-        basicMessageChannel = new BasicMessageChannel<Object>(view,
-                ANDROID_AND_FLUTTER_CHANNEL, StandardMessageCodec.INSTANCE);
+    private void createChannel(FlutterView view) {
+        MethodChannelManager.getInstance().createMethodChannel(view, ANDROID_METHOD_CHANNEL, StandardMethodCodec.INSTANCE);
+        BasicChannelManager.getInstance().createBasicChannel(view, ANDROID_AND_FLUTTER_CHANNEL, StandardMessageCodec.INSTANCE);
+        EventChannelManager.getInstance().createEventChannel(view, ANDROID_EVENT_CHANNEL, StandardMethodCodec.INSTANCE);
+    }
+
+    private void initChannel() {
+        basicMessageChannel = BasicChannelManager.getInstance().getBasicChannelByChannelName(ANDROID_AND_FLUTTER_CHANNEL);
         //dart主动发送，等待平台方回复
         basicMessageChannel.setMessageHandler(new BasicMessageChannel.MessageHandler<Object>() {
             @Override
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        methodChannel = new MethodChannel(view, ANDROID_METHOD_CHANNEL, StandardMethodCodec.INSTANCE);
+        methodChannel = MethodChannelManager.getInstance().getMethodChannelByChannelName(ANDROID_METHOD_CHANNEL);
         methodChannel.setMethodCallHandler(new MethodChannel.MethodCallHandler() {
             @Override
             public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
@@ -76,10 +79,9 @@ public class MainActivity extends AppCompatActivity {
                     case "method1":
                         String replay = "invoke native method1";
                         result.success(replay);
-                        Toast.makeText(getBaseContext(), replay, Toast.LENGTH_SHORT).show();
 
+                        Toast.makeText(getBaseContext(), arguments.toString(), Toast.LENGTH_SHORT).show();
                         break;
-
                     case "method2":
                         boolean arg = false;
                         if (arguments instanceof Boolean) {
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        eventChannel = new EventChannel(view, ANDROID_EVENT_CHANNEL, StandardMethodCodec.INSTANCE);
+        eventChannel = EventChannelManager.getInstance().getEventChannelByChannelName(ANDROID_EVENT_CHANNEL);
         eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
             @Override
             public void onListen(Object o, EventChannel.EventSink eventSink) {

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.hybirdflutter.commincation.ChannelConst;
+
 import io.flutter.facade.Flutter;
 import io.flutter.view.FlutterView;
 
@@ -28,7 +30,7 @@ public class ResActivity extends AppCompatActivity {
 
     private void onCreateFlutterView() {
         // 获取 Flutter view
-        view = Flutter.createView(ResActivity.this, getLifecycle(), "yc_res");
+        view = Flutter.createView(ResActivity.this, getLifecycle(), ChannelConst.RES_ROUTE);
         // 创建 LayoutParams
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
