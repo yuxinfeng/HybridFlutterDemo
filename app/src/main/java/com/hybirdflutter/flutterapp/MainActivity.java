@@ -1,12 +1,16 @@
 package com.hybirdflutter.flutterapp;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,11 +18,16 @@ import com.hybirdflutter.commincation.BasicChannelManager;
 import com.hybirdflutter.commincation.EventChannelManager;
 import com.hybirdflutter.commincation.MethodChannelManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import io.flutter.facade.Flutter;
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.common.StandardMethodCodec;
 import io.flutter.view.FlutterView;
@@ -41,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     TextView methodSend;
     TextView eventSend;
     TextView resActivity;
+    PluginRegistry.Registrar registrar = null ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        if(!view.getPluginRegistry().hasPlugin(ANDROID_METHOD_CHANNEL) ) {
+            registrar = view.getPluginRegistry().registrarFor(ANDROID_METHOD_CHANNEL);
+        }
         methodChannel = MethodChannelManager.getInstance().getMethodChannelByChannelName(ANDROID_METHOD_CHANNEL);
         methodChannel.setMethodCallHandler(new MethodChannel.MethodCallHandler() {
             @Override
@@ -153,7 +167,51 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.img_de).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), HyBirdActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.imgs).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String key = view.getLookupKeyForAsset("assets/images/weizhang.png");
+               AssetManager assetManager;
+               assetManager = registrar.context().getAssets();
+               try {
+                    InputStream in = assetManager.open(key);
+                    byte[] data = getBytes(in);
+                    if (data != null) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        ((ImageView)findViewById(R.id.imgs)).setImageBitmap(bitmap);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+    /*
+     * 得到图片字节流数组大小  inputStream  --> byte
+     */
+    public static byte[] getBytes(InputStream inStream) throws Exception{
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while( (len=inStream.read(buffer)) != -1){
+            outStream.write(buffer, 0, len);
+        }
+        outStream.close();
+        inStream.close();
+        return outStream.toByteArray();
+    }
+
 
     private void initflutterView() {
         // 获取 Flutter view

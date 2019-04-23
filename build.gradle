@@ -18,7 +18,13 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://s3.amazonaws.com/fabric-artifacts/public'
+        }
+        maven {
+            url 'http://mvn.hz.netease.com/artifactory/libs-releases'
+        }
     }
 }
 

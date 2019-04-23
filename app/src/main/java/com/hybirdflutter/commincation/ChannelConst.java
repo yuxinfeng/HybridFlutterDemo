@@ -8,6 +8,8 @@ public class ChannelConst {
 
     public static final String INIT_ROUTE = "yc_route";
     public static final String RES_ROUTE = "yc_res";
+    public static final String Hybird_ROUTE = "yc_hybird";
+
 
     public static final String ANDROID_AND_FLUTTER_CHANNEL = "com.ycbjie.androidAndFlutter/plugin";
     public static final String ANDROID_METHOD_CHANNEL = "com.ycbjie.method/plugin";

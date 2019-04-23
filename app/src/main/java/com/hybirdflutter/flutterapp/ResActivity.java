@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.hybirdflutter.commincation.ChannelConst;
+import com.hybirdflutter.commincation.ResChannelBridge;
 
 import io.flutter.facade.Flutter;
 import io.flutter.view.FlutterView;
@@ -26,6 +27,7 @@ public class ResActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
         onCreateFlutterView();
+        ResChannelBridge.registerByMessenger(view);
     }
 
     private void onCreateFlutterView() {
@@ -37,5 +39,7 @@ public class ResActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT);
         // 添加 flutterView 到当前 Activity
         addContentView(view, layoutParams);
+
+
     }
 }
