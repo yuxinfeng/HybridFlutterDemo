@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.hybirdflutter.commincation.BasicChannelManager;
 import com.hybirdflutter.commincation.EventChannelManager;
 import com.hybirdflutter.commincation.MethodChannelManager;
+import com.hybirdflutter.network.NetWorkActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -193,6 +194,14 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        findViewById(R.id.tv_netActivity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), NetWorkActivity.class);
+                startActivity(intent);
             }
         });
     }

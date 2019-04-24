@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:id="@+id/demofunction"
         android:orientation="vertical">
         <ImageView android:layout_width="50dp"
@@ -51,6 +51,13 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="跳转到resActivity"/>
+        <TextView android:id="@+id/tv_netActivity"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="跳转到netActivity"/>
     </LinearLayout>
     <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"

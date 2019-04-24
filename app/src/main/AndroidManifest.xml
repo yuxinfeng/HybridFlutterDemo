@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".ResActivity"></activity>
         <activity android:name=".HyBirdActivity"></activity>
+        <activity android:name="com.hybirdflutter.network.NetWorkActivity"></activity>
+
 
     </application>
 
